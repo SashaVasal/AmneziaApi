@@ -7,6 +7,9 @@ services:
     restart: unless-stopped
     network_mode: "container:amnezia-awg"
     pid: "container:amnezia-awg"
+    cap_add:
+      - NET_ADMIN
+    privileged: true
     env_file:
       - .env
     environment:
