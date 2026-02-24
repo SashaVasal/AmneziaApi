@@ -1,0 +1,31 @@
+services:
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: awg-api
+    restart: unless-stopped
+    network_mode: "container:amnezia-awg"
+    pid: "container:amnezia-awg"
+    env_file:
+      - .env
+    environment:
+      GIN_MODE: "release"
+      HTTP_ADDR: ":8080"
+      DATA_DIR: "/data"
+      SQLITE_PATH: "/data/awg.db"
+      AWG_INTERFACE: "${AWG_EXTERNAL_INTERFACE:-wg0}"
+      AWG_RUNTIME_MODE: "${AWG_RUNTIME_MODE:-strict}"
+      AWG_SERVER_PUBLIC_KEY: "${AWG_SERVER_PUBLIC_KEY:-UNAVAILABLE_SERVER_PUBLIC_KEY}"
+      AWG_TEMPLATE_PATH: "/app/config/awg-template.env"
+      AWG_SERVER_HOST: "${AWG_SERVER_HOST:-vpn.example.com}"
+      AWG_SERVER_PORT: "${AWG_SERVER_PORT:-48393}"
+      AWG_CLIENT_DNS: "${AWG_CLIENT_DNS:-1.1.1.1}"
+      ADMIN_USERNAME: "${ADMIN_USERNAME:-admin}"
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD:-admin}"
+    volumes:
+      - awg_data:/data
+      - ./backend/config/awg-template.env:/app/config/awg-template.env:ro
+
+volumes:
+  awg_data:

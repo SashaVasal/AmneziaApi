@@ -1,0 +1,8 @@
+.git
+.idea
+.cursor
+bin
+tmp
+*.log
+*.out
+README.md
